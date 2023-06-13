@@ -1,0 +1,29 @@
+/* confirmation-modal.component.scss */
+
+:host {
+  display: block;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0 0 16px;
+}
+
+.modal-content {
+  margin-bottom: 16px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modal-confirm-button {
+  margin-right: 8px;
+  min-width: 96px;
+}
+
+.modal-cancel-button {
+  min-width: 96px;
+}

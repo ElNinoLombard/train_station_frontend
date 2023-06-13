@@ -1,0 +1,49 @@
+<div class="card">
+  <table class="ticket-table">
+    <caption>
+      <div class="flex align-items-center justify-content-between">Trains</div>
+    </caption>
+    <thead>
+      <tr>
+        <th>Train</th>
+        <th>Lieu de départ</th>
+        <th>Heure de départ</th>
+        <th>Lieu d'arrivée</th>
+        <th>Heure d'arrivée</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let trajet of trajets">
+        <td>{{ trajet.trainName }}</td>
+        <td>{{ trajet.specs.departLieu }}</td>
+        <td>{{ trajet.specs.departHeure }}</td>
+        <td>{{ trajet.specs.arriveeLieu }}</td>
+        <td>{{ trajet.specs.arriveeHeure }}</td>
+        <td></td>
+        <!-- <td>
+          <span
+            [ngClass]="getSeverity(trajet.placesReservees, trajet.placesMax)"
+          >
+            ({{ trajet.placesMax - trajet.placesReservees }} places
+            restantes)</span
+          >
+        </td> -->
+        <td>
+          <button
+            class="purchase-button"
+            (click)="openConfirmationModal(trajet)"
+          >
+            Purchase
+          </button>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="6">In total there are {{ trajets.length }} trajets.</td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
