@@ -1,0 +1,4 @@
+<div *ngIf="toastService.isToastVisible" class="toast">
+  <span>{{ toastService.message }}</span>
+  <button (click)="closeToast()">Close</button>
+</div>

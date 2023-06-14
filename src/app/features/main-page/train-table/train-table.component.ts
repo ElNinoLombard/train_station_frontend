@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
+import { TrainService } from 'src/app/shared/train.service';
+import { Router } from '@angular/router';
+import { EditTrainComponent } from '../../staff-page/edit-train/edit-train.component';
 
 @Component({
   selector: 'app-train-table',
@@ -8,125 +11,18 @@ import { ConfirmationModalComponent } from './confirmation-modal/confirmation-mo
   styleUrls: ['./train-table.component.scss'],
 })
 export class TrainTableComponent implements OnInit {
-  trajets: any[] = [
-    {
-      trainName: 'Train A',
-      specs: {
-        departLieu: 'Paris',
-        departHeure: '10:00',
-        arriveeLieu: 'Lyon',
-        arriveeHeure: '12:00',
-      },
-      placesMax: 100,
-      placesReservees: 63,
-    },
-    {
-      trainName: 'Train B',
-      specs: {
-        departLieu: 'Nantes',
-        departHeure: '09:35',
-        arriveeLieu: 'La Rochelle',
-        arriveeHeure: '11:47',
-      },
-      placesMax: 50,
-      placesReservees: 18,
-    },
-    {
-      trainName: 'Train C',
-      specs: {
-        departLieu: 'Bordeaux',
-        departHeure: '14:20',
-        arriveeLieu: 'Toulouse',
-        arriveeHeure: '17:45',
-      },
-      placesMax: 80,
-      placesReservees: 25,
-    },
-    {
-      trainName: 'Train D',
-      specs: {
-        departLieu: 'Lille',
-        departHeure: '08:15',
-        arriveeLieu: 'Strasbourg',
-        arriveeHeure: '10:45',
-      },
-      placesMax: 120,
-      placesReservees: 120,
-    },
-    {
-      trainName: 'Train E',
-      specs: {
-        departLieu: 'Nice',
-        departHeure: '12:30',
-        arriveeLieu: 'Marseille',
-        arriveeHeure: '15:15',
-      },
-      placesMax: 90,
-      placesReservees: 4,
-    },
-    {
-      trainName: 'Train F',
-      specs: {
-        departLieu: 'Rennes',
-        departHeure: '11:10',
-        arriveeLieu: 'Brest',
-        arriveeHeure: '13:00',
-      },
-      placesMax: 70,
-      placesReservees: 15,
-    },
-    {
-      trainName: 'Train G',
-      specs: {
-        departLieu: 'Toulon',
-        departHeure: '09:55',
-        arriveeLieu: 'Cannes',
-        arriveeHeure: '12:35',
-      },
-      placesMax: 150,
-      placesReservees: 146,
-    },
-    {
-      trainName: 'Train H',
-      specs: {
-        departLieu: 'Biarritz',
-        departHeure: '10:20',
-        arriveeLieu: 'Bayonne',
-        arriveeHeure: '11:00',
-      },
-      placesMax: 40,
-      placesReservees: 36,
-    },
-    {
-      trainName: 'Train I',
-      specs: {
-        departLieu: 'Limoges',
-        departHeure: '13:45',
-        arriveeLieu: 'Poitiers',
-        arriveeHeure: '15:10',
-      },
-      placesMax: 60,
-      placesReservees: 42,
-    },
-    {
-      trainName: 'Train J',
-      specs: {
-        departLieu: 'Dijon',
-        departHeure: '08:45',
-        arriveeLieu: 'Lyon',
-        arriveeHeure: '10:20',
-      },
-      placesMax: 80,
-      placesReservees: 36,
-    },
-  ];
+  trajets: any[] = [];
 
-  constructor(private dialog: MatDialog) {}
+  constructor(
+    private dialog: MatDialog,
+    private trainService: TrainService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
-    // this.productService.getProductsMini().then((data) => {
-    //     this.products = data;
-    // });
+    this.trainService.getTrainData().subscribe((trajets) => {
+      this.trajets = trajets;
+    });
   }
 
   getSeverity(placesReservees: number, placesMax: number): string {
@@ -147,5 +43,28 @@ export class TrainTableComponent implements OnInit {
       width: '400px',
       data: trajetWithSpecs,
     });
+  }
+
+  openEditTrainModal(trajet: any) {
+    const dialogRef = this.dialog.open(EditTrainComponent, {
+      width: '400px',
+      data: trajet,
+    });
+
+    dialogRef.afterClosed().subscribe((updatedTrainData: any) => {
+      if (updatedTrainData) {
+        // Update the train data in the TrainTableComponent
+        const index = this.trajets.findIndex(
+          (t) => t.trainName === updatedTrainData.trainName
+        );
+        if (index !== -1) {
+          this.trajets[index] = updatedTrainData;
+        }
+      }
+    });
+  }
+
+  isStaffPage(): boolean {
+    return this.router.url === '/staff';
   }
 }

@@ -1,0 +1,38 @@
+<h1 mat-dialog-title>Editer {{ trainData.trainName }}</h1>
+<div mat-dialog-content>
+  <form [formGroup]="editTrainForm">
+    <div>
+      <label for="departureTime">Heure de départ:</label>
+      <input
+        type="text"
+        id="departureTime"
+        formControlName="departureTime"
+        required
+      />
+    </div>
+    <div>
+      <label for="arrivalTime">Heure d'arrivée:</label>
+      <input
+        type="text"
+        id="arrivalTime"
+        formControlName="arrivalTime"
+        required
+      />
+    </div>
+    <div>
+      <label for="status">Status:</label>
+      <input type="text" id="status" formControlName="status" required />
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Abandon</button>
+  <button
+    mat-button
+    color="primary"
+    (click)="saveChanges()"
+    [disabled]="!editTrainForm.valid"
+  >
+    Sauvegarder
+  </button>
+</div>

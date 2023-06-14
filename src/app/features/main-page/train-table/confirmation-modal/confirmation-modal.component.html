@@ -1,9 +1,13 @@
 <h2 class="modal-title" mat-dialog-title>Confirmation</h2>
 <div class="modal-content" mat-dialog-content>
-  <p>Are you sure you want to purchase a ticket for {{ data.trainName }}?</p>
-  <p>Departure: {{ data.specs?.departLieu }} ({{ data.specs?.departHeure }})</p>
-  <p>Arrival: {{ data.specs?.arriveeLieu }} ({{ data.specs?.arriveeHeure }})</p>
-  <p>Available Seats: {{ availableSeats }} out of {{ data.placesMax }}</p>
+  <p>
+    Êtes-vous sûr de vouloir réserver une place pour le {{ data.trainName }}?
+  </p>
+  <p>Départ à: {{ data.specs?.departLieu }} ({{ data.specs?.departHeure }})</p>
+  <p>
+    Arrivée à: {{ data.specs?.arriveeLieu }} ({{ data.specs?.arriveeHeure }})
+  </p>
+  <p>Places disponibles: {{ availableSeats }} de {{ data.placesMax }}</p>
 </div>
 <div class="modal-actions" mat-dialog-actions>
   <button
@@ -12,7 +16,7 @@
     color="primary"
     (click)="confirm()"
   >
-    Confirm
+    Réserver
   </button>
   <button
     class="modal-cancel-button"
@@ -20,6 +24,6 @@
     color="warn"
     (click)="cancel()"
   >
-    Cancel
+    Annuler
   </button>
 </div>

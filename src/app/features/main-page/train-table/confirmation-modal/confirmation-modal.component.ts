@@ -1,8 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
+import { ToastService } from 'src/app/shared/toast.service';
 
 @Component({
   selector: 'app-confirmation-modal',
@@ -14,7 +12,8 @@ export class ConfirmationModalComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<ConfirmationModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private toastService: ToastService // Inject the ToastService
   ) {
     console.log(data);
     this.availableSeats = data.placesMax - data.placesReservees;
@@ -23,9 +22,12 @@ export class ConfirmationModalComponent implements OnInit {
   ngOnInit(): void {}
 
   confirm() {
-    // Logic for confirming the ticket purchase
-    // You can handle the ticket purchase here or emit an event to notify the parent component
-    // Once the ticket is confirmed, you can close the modal using dialogRef.close()
+    const trainName = this.data.trainName;
+    this.toastService.success(
+      `Votre place pour ${trainName} a bien été réservée`
+    ); // Trigger the success toast
+
+    // Close the modal
     this.dialogRef.close();
   }
 

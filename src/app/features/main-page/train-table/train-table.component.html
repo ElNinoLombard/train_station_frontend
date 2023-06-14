@@ -1,7 +1,9 @@
 <div class="card">
   <table class="ticket-table">
     <caption>
-      <div class="flex align-items-center justify-content-between">Trains</div>
+      <div class="flex align-items-center justify-content-between">
+        <h1>TRAINS</h1>
+      </div>
     </caption>
     <thead>
       <tr>
@@ -21,28 +23,28 @@
         <td>{{ trajet.specs.departHeure }}</td>
         <td>{{ trajet.specs.arriveeLieu }}</td>
         <td>{{ trajet.specs.arriveeHeure }}</td>
-        <td></td>
-        <!-- <td>
-          <span
-            [ngClass]="getSeverity(trajet.placesReservees, trajet.placesMax)"
-          >
-            ({{ trajet.placesMax - trajet.placesReservees }} places
-            restantes)</span
-          >
-        </td> -->
+        <td>{{ trajet.status }}</td>
         <td>
           <button
+            *ngIf="!isStaffPage()"
             class="purchase-button"
             (click)="openConfirmationModal(trajet)"
           >
-            Purchase
+            Réserver
+          </button>
+          <button
+            class="purchase-button"
+            *ngIf="isStaffPage()"
+            (click)="openEditTrainModal(trajet)"
+          >
+            Editer
           </button>
         </td>
       </tr>
     </tbody>
     <tfoot>
       <tr>
-        <td colspan="6">In total there are {{ trajets.length }} trajets.</td>
+        <td colspan="6">Il y a {{ trajets.length }} trajets prévus.</td>
       </tr>
     </tfoot>
   </table>
