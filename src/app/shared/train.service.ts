@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root',
@@ -8,11 +9,15 @@ export class TrainService {
   private trainDataSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>(
     []
   );
+  private http: any;
 
   constructor() {}
 
-  getTrainData(): Observable<any[]> {
-    return this.trainDataSubject.asObservable();
+  getTrainData(): Observable<any> {
+    const url = `http://localhost${environment.backLocation}trajets`;
+    console.log(url);
+    // @ts-ignore
+    return this.http.get<any>(url);
   }
 
   setTrainData(trajets: any[]): void {

@@ -21,6 +21,8 @@ export class TrainTableComponent implements OnInit {
 
   ngOnInit() {
     this.trainService.getTrainData().subscribe((trajets) => {
+      console.log('subscribe');
+      console.log(trajets);
       this.trajets = trajets;
     });
   }
