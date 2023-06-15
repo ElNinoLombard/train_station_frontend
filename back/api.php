@@ -13,7 +13,11 @@ if ($location) {
 switch ($request_method) {
     case 'GET':
         if (preg_match('/trajets.*/', $route)) {
-            getAllTrajets();
+            if (!empty($_GET['id_gare'])){
+              getAllTrajetsByGare($_GET['id_gare']);
+            } else {
+              getAllTrajets();
+            }
         } else if (preg_match('/ca.*/', $route)) {
                 getCA();
             }
@@ -42,15 +46,12 @@ function getAllTrajets() {
     global $connexion;
     global $returnData;
 
-//    $date = date('Y-m-d');
-    $date = '2023-06-08';
-
     $query = "SELECT * FROM `trajets`
 LEFT JOIN models_trajet on models_trajet.id = id_models_trajet
 LEFT JOIN trains on trains.id = id_train
-WHERE trajets.date = '$date'
 ORDER BY models_trajet.depart_heure ASC";
     $result = mysqli_query($connexion, $query);
+
     if ($result) {
         $returnData['data'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
     } else {
@@ -132,6 +133,31 @@ WHERE annulations.id is null;";
         $returnData['data'] = $ca;
     } else {
         $returnData['message'] = mysqli_connect_error();
+    }
+
+    echo json_encode($returnData);
+}
+
+function getAllTrajetsByGare($id_gare) {
+    global $connexion;
+    global $returnData;
+
+//    $date = new DateTime('now');
+  $date = new DateTime('2023-06-08');
+  $date_max = $date->format('Y-m-d');
+    $date_min = $date->modify("-1 day")->format('y-m-d');
+
+    $query = "SELECT date, places_reservees, depart_lieu, depart_heure, arrivee_lieu, arrivee_heure, places_max, trains.nom as nom_train, gares.nom as nom_gare, ville FROM `trajets`
+LEFT JOIN models_trajet on models_trajet.id = id_models_trajet
+LEFT JOIN trains on trains.id = id_train
+LEFT JOIN gares on gares.id = models_trajet.depart_lieu or gares.id = models_trajet.arrivee_lieu
+WHERE date = '$date_min' or date = '$date_max' AND gares.id = $id_gare
+ORDER BY models_trajet.depart_heure ASC;";
+    $result = mysqli_query($connexion, $query);
+    if ($result) {
+      $returnData['data'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    } else {
+      $returnData['message'] = mysqli_connect_error();
     }
 
     echo json_encode($returnData);
