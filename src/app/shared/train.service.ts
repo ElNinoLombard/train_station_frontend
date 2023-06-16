@@ -26,8 +26,26 @@ export class TrainService {
     return this.http.get<any>(url);
   }
 
-  setTrainData(trajets: any[]): void {
-    this.trainDataSubject.next(trajets);
+  setTrainRetard(id: number, duree: number, commentaire: string) {
+    const url = `http://localhost${environment.backLocation}retard`;
+    console.log(url);
+    const args = {
+      id,
+      duree,
+      commentaire
+    }
+    // @ts-ignore
+    return this.http.post<any>(url, args);
+  }
+  setTrainAnnulation(id: number, commentaire: string) {
+    const url = `http://localhost${environment.backLocation}annulation`;
+    console.log(url);
+    const args = {
+      id,
+      commentaire
+    }
+    // @ts-ignore
+    return this.http.post<any>(url, args);
   }
 
   updateTrainData(updatedTrainData: any): void {
