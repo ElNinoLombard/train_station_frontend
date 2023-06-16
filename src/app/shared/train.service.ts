@@ -12,7 +12,7 @@ export class TrainService {
   );
   private baseUrl: string = `http://localhost${environment.backLocation}`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getTrainData(): Observable<any> {
     const apiUrl = `${this.baseUrl}trajets`;

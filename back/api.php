@@ -23,16 +23,16 @@ switch ($request_method) {
         } else if (preg_match('/gare.*/', $route)) {
             getAllGares();
         } else if (preg_match('/retard.*/', $route)) {
-          if (!empty($_GET['id'])) {
-            getRetardByTrajet($_GET['id']);
-          } else {
-            getAllRetards();
-          }
+            if (!empty($_GET['id'])) {
+                getRetardByTrajet($_GET['id']);
+            } else {
+                getAllRetards();
+            }
         } else if (preg_match('/annulation.*/', $route)) {
             if (!empty($_GET['id'])) {
-              getAnnulationByTrajet($_GET['id']);
+                getAnnulationByTrajet($_GET['id']);
             } else {
-              getAllAnnulations();
+                getAllAnnulations();
             }
         }
 
@@ -213,64 +213,68 @@ function getAllGares()
     echo json_encode($returnData);
 }
 
-function getAllRetards() {
-  global $connexion;
-  global $returnData;
+function getAllRetards()
+{
+    global $connexion;
+    global $returnData;
 
-  $query = "SELECT * FROM `retards`";
-  $result = mysqli_query($connexion, $query);
+    $query = "SELECT * FROM `retards`";
+    $result = mysqli_query($connexion, $query);
 
-  if ($result) {
-    $returnData['data'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
-  } else {
-    $returnData['message'] = mysqli_connect_error();
-  }
+    if ($result) {
+        $returnData['data'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    } else {
+        $returnData['message'] = mysqli_connect_error();
+    }
 
-  echo json_encode($returnData);
+    echo json_encode($returnData);
 }
-function getRetardByTrajet($id_trajet) {
-  global $connexion;
-  global $returnData;
+function getRetardByTrajet($id_trajet)
+{
+    global $connexion;
+    global $returnData;
 
-  $query = "SELECT * FROM `retards` WHERE id_trajet = $id_trajet";
-  $result = mysqli_query($connexion, $query);
+    $query = "SELECT * FROM `retards` WHERE id_trajet = $id_trajet";
+    $result = mysqli_query($connexion, $query);
 
-  if ($result) {
-    $returnData['data'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
-  } else {
-    $returnData['message'] = mysqli_connect_error();
-  }
+    if ($result) {
+        $returnData['data'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    } else {
+        $returnData['message'] = mysqli_connect_error();
+    }
 
-  echo json_encode($returnData);
+    echo json_encode($returnData);
 }
 
-function getAllAnnulation() {
-  global $connexion;
-  global $returnData;
+function getAllAnnulations()
+{
+    global $connexion;
+    global $returnData;
 
-  $query = "SELECT * FROM `annulation`";
-  $result = mysqli_query($connexion, $query);
+    $query = "SELECT * FROM `annulation`";
+    $result = mysqli_query($connexion, $query);
 
-  if ($result) {
-    $returnData['data'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
-  } else {
-    $returnData['message'] = mysqli_connect_error();
-  }
+    if ($result) {
+        $returnData['data'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    } else {
+        $returnData['message'] = mysqli_connect_error();
+    }
 
-  echo json_encode($returnData);
+    echo json_encode($returnData);
 }
-function getAnnulationByTrajet($id_trajet) {
-  global $connexion;
-  global $returnData;
+function getAnnulationByTrajet($id_trajet)
+{
+    global $connexion;
+    global $returnData;
 
-  $query = "SELECT * FROM `annulations` WHERE id_trajet = $id_trajet";
-  $result = mysqli_query($connexion, $query);
+    $query = "SELECT * FROM `annulations` WHERE id_trajet = $id_trajet";
+    $result = mysqli_query($connexion, $query);
 
-  if ($result) {
-    $returnData['data'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
-  } else {
-    $returnData['message'] = mysqli_connect_error();
-  }
+    if ($result) {
+        $returnData['data'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    } else {
+        $returnData['message'] = mysqli_connect_error();
+    }
 
-  echo json_encode($returnData);
+    echo json_encode($returnData);
 }

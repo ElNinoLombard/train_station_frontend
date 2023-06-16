@@ -1,7 +1,7 @@
 import {Component, Inject, Input, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import {TrainService} from "../../../shared/train.service";
+import { TrainService } from 'src/app/shared/train.service';
 
 @Component({
   selector: 'app-edit-train',
@@ -30,29 +30,37 @@ export class EditTrainComponent implements OnInit {
   }
 
   saveChanges(): void {
-    if (this.editTrainForm.valid) {
-      const selectedStatus = this.editTrainForm.value.status;
-      const commentaire = this.editTrainForm.value.commentaire;
-      const duree = this.editTrainForm.value.duree;
-      let status = selectedStatus;
+  if (this.editTrainForm.valid) {
+    const selectedStatus = this.editTrainForm.value.status;
+    let status = selectedStatus;
 
-      if (selectedStatus === 'En retard') {
-        this.trainService.setTrainRetard(this.trainData.id, duree, commentaire);
-      } else if (selectedStatus === 'Annulé') {
-        this.trainService.setTrainAnnulation(this.trainData.id, commentaire);
-      }
+    if (selectedStatus === 'En retard') {
+      const delayTime = this.editTrainForm.value.delayTime;
+      status += ` de ${delayTime}`;
 
+      this.trainService.setTrainRetard(this.trainData.id, delayTime, '')
+        .subscribe(() => {
+          const updatedTrainData = {
+            ...this.trainData,
+            status: status
+          };
+
+          this.dialogRef.close(updatedTrainData);
+        }, (error) => {
+          console.error('Failed to update the retards table:', error);
+          // Handle the error or show an error message to the user
+        });
+    } else {
       const updatedTrainData = {
         ...this.trainData,
-        specs: {
-          ...this.trainData.specs,
-        },
-        status: status,
+        status: status
       };
 
       this.dialogRef.close(updatedTrainData);
     }
   }
+}
+
 
   onCancel() {
     this.dialogRef.close();
