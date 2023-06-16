@@ -76,4 +76,9 @@ export class TrainService {
       this.trainDataSubject.next(trajets);
     }
   }
+
+  getCA() {
+      const apiUrl = `${this.baseUrl}ca`;
+      return this.http.get<any>(apiUrl);
+  }
 }

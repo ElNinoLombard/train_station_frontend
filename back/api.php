@@ -119,6 +119,10 @@ function setRetard($id_trajet, $duree, $commentaire)
         $returnData['message'] = 'PUT échoué';
     }
 
+    header('Content-Type: application/json');
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: POST');
+    header('Access-Control-Allow-Headers: Content-Type');
     echo json_encode($returnData);
 }
 
@@ -126,6 +130,11 @@ function setAnnulation($id_trajet, $commentaire)
 {
     global $connexion;
     global $returnData;
+
+  header('Content-Type: application/json');
+  header('Access-Control-Allow-Origin: *');
+  header('Access-Control-Allow-Methods: GET');
+  header('Access-Control-Allow-Headers: Content-Type');
 
     $query = "INSERT INTO `annulations` (`id`, `id_trajet`, `commentaire`)
         VALUES (NULL, '$id_trajet', '$commentaire')";
@@ -246,10 +255,9 @@ function getRetardByTrajet($id_trajet)
     echo json_encode($returnData);
 }
 
-function getAllAnnulations()
-{
-    global $connexion;
-    global $returnData;
+function getAllAnnulations() {
+  global $connexion;
+  global $returnData;
 
     $query = "SELECT * FROM `annulation`";
     $result = mysqli_query($connexion, $query);
@@ -275,6 +283,5 @@ function getAnnulationByTrajet($id_trajet)
     } else {
         $returnData['message'] = mysqli_connect_error();
     }
-
     echo json_encode($returnData);
 }

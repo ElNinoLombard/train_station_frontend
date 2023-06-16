@@ -20,36 +20,38 @@ export class EditTrainComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.trainData);
     this.editTrainForm = this.formBuilder.group({
       departureTime: [this.trainData.depart_heure, Validators.required],
       arrivalTime: [this.trainData.arrivee_heure, Validators.required],
       status: [this.trainData.status || "à l'heure", Validators.required],
       delayTime: [{ value: '', disabled: this.trainData.status !== 'delayed' }],
+      delayReason: '',
     });
     this.isDelayed = this.trainData.status === 'delayed';
   }
 
   saveChanges(): void {
-  if (this.editTrainForm.valid) {
-    const selectedStatus = this.editTrainForm.value.status;
-    let status = selectedStatus;
+    if (this.editTrainForm.valid) {
+      const selectedStatus = this.editTrainForm.value.status;
+      const commentaire = this.editTrainForm.value.delayReason;
+      const duree = this.editTrainForm.value.delayTime;
+      let status = selectedStatus;
 
-    if (selectedStatus === 'En retard') {
-      const delayTime = this.editTrainForm.value.delayTime;
-      status += ` de ${delayTime}`;
-
-      this.trainService.setTrainRetard(this.trainData.id, delayTime, '')
-        .subscribe(() => {
-          const updatedTrainData = {
-            ...this.trainData,
-            status: status
-          };
-
-          this.dialogRef.close(updatedTrainData);
-        }, (error) => {
-          console.error('Failed to update the retards table:', error);
-          // Handle the error or show an error message to the user
-        });
+      console.log(selectedStatus);
+      console.log(this.trainData.id_trajet);
+      console.log(duree);
+      console.log(commentaire);
+      if (selectedStatus === 'En retard') {
+        this.trainService.setTrainRetard(this.trainData.id_trajet, duree, commentaire).subscribe(
+          response => {
+            console.log(response);
+          },
+          error => {console.log(error);}
+        );
+      } else if (selectedStatus === 'Annulé') {
+        this.trainService.setTrainAnnulation(this.trainData.id_trajet, commentaire);
+      }
     } else {
       const updatedTrainData = {
         ...this.trainData,
@@ -59,8 +61,6 @@ export class EditTrainComponent implements OnInit {
       this.dialogRef.close(updatedTrainData);
     }
   }
-}
-
 
   onCancel() {
     this.dialogRef.close();

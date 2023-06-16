@@ -14,7 +14,7 @@
     </div>
     <div>
       <label for="delayReason">Raison du retard:</label>
-      <input [disabled]="!isDelayed" type="text" />
+      <input formControlName="delayReason" [disabled]="!isDelayed" type="text" />
     </div>
   </form>
 </div>
