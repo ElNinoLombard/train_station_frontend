@@ -20,7 +20,10 @@ switch ($request_method) {
             }
         } else if (preg_match('/ca.*/', $route)) {
                 getCA();
-            }
+        } else if (preg_match('/gare.*/', $route)) {
+            getAllGares();
+        }
+
         break;
     case 'POST':
         if (!empty($_POST['id'])) {
@@ -170,4 +173,20 @@ GROUP BY trajets.id, annulations.id;";
     }
 
     echo json_encode($returnData);
+}
+
+function getAllGares() {
+  global $connexion;
+  global $returnData;
+
+  $query = "SELECT * FROM `gares`";
+  $result = mysqli_query($connexion, $query);
+
+  if ($result) {
+    $returnData['data'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
+  } else {
+    $returnData['message'] = mysqli_connect_error();
+  }
+
+  echo json_encode($returnData);
 }
