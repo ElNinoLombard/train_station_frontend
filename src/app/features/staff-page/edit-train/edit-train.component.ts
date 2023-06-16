@@ -1,6 +1,7 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import {Component, Inject, Input, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {TrainService} from "../../../shared/train.service";
 
 @Component({
   selector: 'app-edit-train',
@@ -14,6 +15,7 @@ export class EditTrainComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<EditTrainComponent>,
     private formBuilder: FormBuilder,
+    private trainService: TrainService,
     @Inject(MAT_DIALOG_DATA) public trainData: any
   ) {}
 
@@ -30,11 +32,14 @@ export class EditTrainComponent implements OnInit {
   saveChanges(): void {
     if (this.editTrainForm.valid) {
       const selectedStatus = this.editTrainForm.value.status;
+      const commentaire = this.editTrainForm.value.commentaire;
+      const duree = this.editTrainForm.value.duree;
       let status = selectedStatus;
 
       if (selectedStatus === 'En retard') {
-        const delayTime = this.editTrainForm.value.delayTime;
-        status += ` de ${delayTime}`;
+        this.trainService.setTrainRetard(this.trainData.id, duree, commentaire);
+      } else if (selectedStatus === 'Annulé') {
+        this.trainService.setTrainAnnulation(this.trainData.id, commentaire);
       }
 
       const updatedTrainData = {
