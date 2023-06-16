@@ -14,9 +14,13 @@ export class TrainService {
 
   constructor(private http: HttpClient) {}
 
-  getTrainData(): Observable<any[]> {
+  getTrainData(): Observable<any> {
     const apiUrl = `${this.baseUrl}trajets`;
     return this.http.get<any[]>(apiUrl);
+  }
+  getGareData(): Observable<any> {
+    const apiUrl = `${this.baseUrl}gares`;
+    return this.http.get<any>(apiUrl);
   }
 
   getTrainDataByGare(idGare: number): Observable<any> {

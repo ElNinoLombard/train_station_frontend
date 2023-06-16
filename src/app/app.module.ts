@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 import { AppComponent } from './app.component';
 import { MainPageComponent } from './features/main-page/main-page.component';
@@ -39,6 +40,7 @@ import { EditTrainComponent } from './features/staff-page/edit-train/edit-train.
     HttpClientModule,
     MatAutocompleteModule,
     MatFormFieldModule,
+    MatInputModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

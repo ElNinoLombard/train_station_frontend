@@ -3,31 +3,35 @@
   width: 300px;
   margin: 20px auto;
 
-  input {
+  mat-form-field {
     width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 20px;
-    background-color: #f1f1f1;
-    color: #333;
-    font-size: 16px;
-    outline: none;
-    transition: background-color 0.3s;
 
-    &::placeholder {
-      color: #999;
-    }
-
-    &:focus {
-      background-color: #fff;
+    input {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 20px;
+      background-color: #f1f1f1;
+      color: #333;
+      font-size: 16px;
+      outline: none;
+      transition: background-color 0.3s;
 
       &::placeholder {
-        color: #ccc;
+        color: #999;
+      }
+
+      &:focus {
+        background-color: #fff;
+
+        &::placeholder {
+          color: #ccc;
+        }
       }
     }
   }
 
-  span {
+  span.clear-icon {
     position: absolute;
     top: 50%;
     right: 10px;

@@ -1,12 +1,21 @@
 <div class="search-bar">
-  <mat-autocomplete
-    #auto="matAutocomplete"
-    (optionSelected)="handleSearchInput()"
-  >
-    <mat-option *ngFor="let option of options" [value]="option">
-      {{ option }}
-    </mat-option>
-  </mat-autocomplete>
+  <mat-form-field>
+    <input
+      matInput
+      placeholder="Search"
+      [formControl]="searchControl"
+      (input)="handleSearchInput()"
+      [matAutocomplete]="auto"
+    />
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      (optionSelected)="handleSearchOptionSelected($event)"
+    >
+      <mat-option *ngFor="let option of options" [value]="option.id">
+        {{ option.nom + " | " + option.ville }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
 </div>
 
 <app-train-table [trains]="filteredTrains"></app-train-table>
