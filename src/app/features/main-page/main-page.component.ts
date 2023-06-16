@@ -27,16 +27,17 @@ export class MainPageComponent implements OnInit {
   ngOnInit(): void {
     this.trainService.getGareData().subscribe({
       next: (gares: any) => {
-        console.log("gares:", gares); // Verify the data received
-        this.options = gares.data
+        console.log('gares:', gares); // Verify the data received
+        this.options = gares.data;
       },
       error: (error: any) => {
         console.error('Error fetching gare data:', error);
       },
     });
+
     this.trainService.getTrainData().subscribe({
       next: (trains: any) => {
-        console.log("trains:", trains); // Verify the data received
+        console.log('trains:', trains); // Verify the data received
         this.allTrains = trains.data;
         this.applyFilters();
       },
@@ -45,10 +46,9 @@ export class MainPageComponent implements OnInit {
       },
     });
 
-    // this.filteredOptions = this.searchControl.valueChanges.pipe(
-    //   startWith(''),
-    //   map((value) => this.filterOptions(value))
-    // );
+    this.searchControl.valueChanges.subscribe(() => {
+      this.applyFilters();
+    });
   }
 
   applyFilters(): void {
@@ -74,16 +74,23 @@ export class MainPageComponent implements OnInit {
 
     const currentTime = new Date();
     const filteredTrains = trains.filter((train) => {
+      if (!train) {
+        return false;
+      }
+
       const departTime = new Date(train.departureTime);
       const arrivalTime = new Date(train.arrivalTime);
 
+      const departureLocation = train.departureLocation?.toLowerCase() || '';
+      const arrivalLocation = train.arrivalLocation?.toLowerCase() || '';
+
       // Filter based on departure location, search query, and time constraints
       return (
-        (train.departureLocation.toLowerCase().includes(
-          this.searchControl.value?.toLowerCase()
+        (departureLocation.includes(
+          this.searchControl.value?.toLowerCase() || ''
         ) ||
-          train.arrivalLocation.toLowerCase().includes(
-            this.searchControl.value?.toLowerCase()
+          arrivalLocation.includes(
+            this.searchControl.value?.toLowerCase() || ''
           )) &&
         (departTime >= currentTime || arrivalTime >= currentTime)
       );
@@ -93,13 +100,15 @@ export class MainPageComponent implements OnInit {
   }
 
   handleSearchOptionSelected(option: any): void {
+    const selectedOptionText = option.option.viewValue;
     console.log('searchControl:', this.searchControl.value);
-    console.log('option:', option);
-    this.searchControl.setValue(option.option.element.nativeElement.innerText);
-    this.trainService.getTrainDataByGare(this.searchControl.value).subscribe({
+    console.log('selectedOptionText:', selectedOptionText);
+    this.searchControl.setValue(selectedOptionText);
+    this.trainService.getTrainDataByGare(option.option.value).subscribe({
       next: (trains: any) => {
         this.allTrains = trains.data;
-      }
+        this.applyFilters(); // Apply filters after updating the train data
+      },
     });
   }
 
