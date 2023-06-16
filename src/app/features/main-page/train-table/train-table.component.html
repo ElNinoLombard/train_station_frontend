@@ -2,7 +2,7 @@
   <table class="ticket-table">
     <caption>
       <div class="flex align-items-center justify-content-between">
-        <h1>TRAINS</h1>
+        <h1>TRAINS À L' APPROCHE</h1>
       </div>
     </caption>
     <thead>
@@ -17,13 +17,13 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let trajet of trajets">
-        <td>{{ trajet.trainName }}</td>
-        <td>{{ trajet.specs.departLieu }}</td>
-        <td>{{ trajet.specs.departHeure }}</td>
-        <td>{{ trajet.specs.arriveeLieu }}</td>
-        <td>{{ trajet.specs.arriveeHeure }}</td>
-        <td>{{ trajet.status }}</td>
+      <tr *ngFor="let trajet of trains">
+        <td>{{ trajet?.nom_train }}</td>
+        <td>{{ trajet?.gare_depart }}</td>
+        <td>{{ trajet?.depart_heure }}</td>
+        <td>{{ trajet?.gare_arrivee }}</td>
+        <td>{{ trajet?.arrivee_heure }}</td>
+        <td>{{ trajet?.status }}</td>
         <td>
           <button
             *ngIf="!isStaffPage()"
@@ -42,10 +42,5 @@
         </td>
       </tr>
     </tbody>
-    <tfoot>
-      <tr>
-        <td colspan="6">Il y a {{ trajets.length }} trajets prévus.</td>
-      </tr>
-    </tfoot>
   </table>
 </div>

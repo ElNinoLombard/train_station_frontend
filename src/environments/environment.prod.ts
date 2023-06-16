@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  api_location: '/sncf/train_station_frontend/back/api/'
+  backLocation: '/train_station_project_td8/train_station_frontend/back/api.php/'
 };

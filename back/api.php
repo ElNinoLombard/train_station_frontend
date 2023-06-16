@@ -3,7 +3,7 @@ include 'db_connect.php';
 
 $request_method = $_SERVER['REQUEST_METHOD'];
 $uri = $_SERVER['REQUEST_URI'];
-$location = '/sncf/train_station_frontend/back';
+$location = '/train_station_project_td8/train_station_frontend/back/api.php';
 $returnData = ['data' => [], 'message' => 'Succes'];
 
 if ($location) {
@@ -13,13 +13,13 @@ if ($location) {
 switch ($request_method) {
     case 'GET':
         if (preg_match('/trajets.*/', $route)) {
-            if (!empty($_GET['id_gare'])){
-              getAllTrajetsByGare($_GET['id_gare']);
+            if (!empty($_GET['id_gare'])) {
+                getAllTrajetsByGare($_GET['id_gare']);
             } else {
-              getAllTrajets();
+                getAllTrajets();
             }
         } else if (preg_match('/ca.*/', $route)) {
-                getCA();
+            getCA();
         } else if (preg_match('/gare.*/', $route)) {
             getAllGares();
         }
@@ -32,7 +32,7 @@ switch ($request_method) {
             if (preg_match('/retard.*/', $route)) {
                 $duree = intval($_POST['duree']);
                 $commentaire = $_POST['commentaire'];
-                setRetard($id, $duree, $commentaire );
+                setRetard($id, $duree, $commentaire);
             } else if (preg_match('/annulation.*/', $route)) {
                 $commentaire = $_POST['commentaire'];
                 setAnnulation($id, $commentaire);
@@ -45,11 +45,15 @@ switch ($request_method) {
         break;
 }
 
-function getAllTrajets() {
+function getAllTrajets()
+{
     global $connexion;
     global $returnData;
 
-    $query = "SELECT trajets.id as id_trajet, date, places_reservees, g1.nom as gare_depart, g1.ville as ville_depart, depart_heure, g2.nom as gare_depart, g2.ville as ville_depart, arrivee_heure, places_max, trains.nom as nom_train, SUM(retards.duree) as retards, annulations.id as annulations FROM `trajets`
+    //$date = date('Y-m-d');
+    $date = '2023-06-08';
+    $query = "SELECT trajets.id as id_trajet, date, places_reservees, g1.nom as gare_depart, g1.ville as ville_depart, depart_heure, g2.nom as gare_arrivee, g2.ville as ville_arrivee, arrivee_heure, places_max, trains.nom as nom_train, SUM(retards.duree) as retards, annulations.id as annulations FROM `trajets`
+
 LEFT JOIN models_trajet on models_trajet.id = id_models_trajet
 LEFT JOIN trains on trains.id = id_train
 LEFT JOIN gares as g1 on g1.id = models_trajet.depart_lieu
@@ -69,7 +73,8 @@ ORDER BY models_trajet.depart_heure ASC;";
     echo json_encode($returnData);
 }
 
-function setTrajet($id_models_trajet, $id_train, $date, $places_reservees) {
+function setTrajet($id_models_trajet, $id_train, $date, $places_reservees)
+{
     global $connexion;
     global $returnData;
 
@@ -86,7 +91,8 @@ function setTrajet($id_models_trajet, $id_train, $date, $places_reservees) {
     echo json_encode($returnData);
 }
 
-function setRetard($id_trajet, $duree, $commentaire) {
+function setRetard($id_trajet, $duree, $commentaire)
+{
     global $connexion;
     global $returnData;
 
@@ -104,7 +110,8 @@ function setRetard($id_trajet, $duree, $commentaire) {
     echo json_encode($returnData);
 }
 
-function setAnnulation($id_trajet, $commentaire) {
+function setAnnulation($id_trajet, $commentaire)
+{
     global $connexion;
     global $returnData;
 
@@ -122,7 +129,8 @@ function setAnnulation($id_trajet, $commentaire) {
     echo json_encode($returnData);
 }
 
-function getCA() {
+function getCA()
+{
     global $connexion;
     global $returnData;
 
@@ -146,13 +154,14 @@ WHERE annulations.id is null;";
     echo json_encode($returnData);
 }
 
-function getAllTrajetsByGare($id_gare) {
+function getAllTrajetsByGare($id_gare)
+{
     global $connexion;
     global $returnData;
 
-//    $date = new DateTime('now');
-  $date = new DateTime('2023-06-08');
-  $date_max = $date->format('Y-m-d');
+    //    $date = new DateTime('now');
+    $date = new DateTime('2023-06-08');
+    $date_max = $date->format('Y-m-d');
     $date_min = $date->modify("-1 day")->format('y-m-d');
 
     $query = "SELECT trajets.id AS id_trajet, date, places_reservees, g1.nom AS gare_depart, g1.ville AS ville_depart, depart_heure, g2.nom AS gare_arrivee, g2.ville AS ville_arrivee, arrivee_heure, places_max, trains.nom AS nom_train, SUM(retards.duree) AS retards, annulations.id AS annulations
@@ -167,26 +176,27 @@ WHERE date IN ('$date_min', '$date_max') AND (g1.id = $id_gare OR g2.id = $id_ga
 GROUP BY trajets.id, annulations.id;";
     $result = mysqli_query($connexion, $query);
     if ($result) {
-      $returnData['data'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        $returnData['data'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
     } else {
-      $returnData['message'] = mysqli_connect_error();
+        $returnData['message'] = mysqli_connect_error();
     }
 
     echo json_encode($returnData);
 }
 
-function getAllGares() {
-  global $connexion;
-  global $returnData;
+function getAllGares()
+{
+    global $connexion;
+    global $returnData;
 
-  $query = "SELECT * FROM `gares`";
-  $result = mysqli_query($connexion, $query);
+    $query = "SELECT * FROM `gares`";
+    $result = mysqli_query($connexion, $query);
 
-  if ($result) {
-    $returnData['data'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
-  } else {
-    $returnData['message'] = mysqli_connect_error();
-  }
+    if ($result) {
+        $returnData['data'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    } else {
+        $returnData['message'] = mysqli_connect_error();
+    }
 
-  echo json_encode($returnData);
+    echo json_encode($returnData);
 }

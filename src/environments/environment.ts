@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  backLocation: '/sncf/train_station_frontend/back/api/'
+  backLocation: '/train_station_project_td8/train_station_frontend/back/api.php/'
 };
 
 /*

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
 import { TrainService } from 'src/app/shared/train.service';
@@ -11,20 +11,24 @@ import { EditTrainComponent } from '../../staff-page/edit-train/edit-train.compo
   styleUrls: ['./train-table.component.scss'],
 })
 export class TrainTableComponent implements OnInit {
-  trajets: any[] = [];
+  @Input() trains: any[] = [];
 
   constructor(
     private dialog: MatDialog,
-    private trainService: TrainService,
-    private router: Router
+    private router: Router,
+    private trainService: TrainService
   ) {}
 
   ngOnInit() {
-    this.trainService.getTrainData().subscribe((trajets) => {
-      console.log('subscribe');
-      console.log(trajets);
-      this.trajets = trajets;
-    });
+    this.trainService.getTrainData().subscribe(
+      (data: any) => {
+        this.trains = data.data; // Assign the fetched data to the trains property
+        console.log('Train data fetched:', data);
+      },
+      (error: any) => {
+        console.error('Error fetching train data:', error);
+      }
+    );
   }
 
   getSeverity(placesReservees: number, placesMax: number): string {
@@ -56,11 +60,11 @@ export class TrainTableComponent implements OnInit {
     dialogRef.afterClosed().subscribe((updatedTrainData: any) => {
       if (updatedTrainData) {
         // Update the train data in the TrainTableComponent
-        const index = this.trajets.findIndex(
+        const index = this.trains.findIndex(
           (t) => t.trainName === updatedTrainData.trainName
         );
         if (index !== -1) {
-          this.trajets[index] = updatedTrainData;
+          this.trains[index] = updatedTrainData;
         }
       }
     });

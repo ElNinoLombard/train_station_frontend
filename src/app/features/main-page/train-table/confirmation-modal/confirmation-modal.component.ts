@@ -22,7 +22,7 @@ export class ConfirmationModalComponent implements OnInit {
   ngOnInit(): void {}
 
   confirm() {
-    const trainName = this.data.trainName;
+    const trainName = this.data.train_nom;
     this.toastService.success(
       `Votre place pour ${trainName} a bien été réservée`
     ); // Trigger the success toast

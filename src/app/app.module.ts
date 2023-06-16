@@ -5,6 +5,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { AppComponent } from './app.component';
 import { MainPageComponent } from './features/main-page/main-page.component';
@@ -31,6 +35,10 @@ import { EditTrainComponent } from './features/staff-page/edit-train/edit-train.
     MatDialogModule,
     MatSnackBarModule,
     ReactiveFormsModule,
+    FormsModule,
+    HttpClientModule,
+    MatAutocompleteModule,
+    MatFormFieldModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

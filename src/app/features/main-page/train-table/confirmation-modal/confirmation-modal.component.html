@@ -1,13 +1,14 @@
 <h2 class="modal-title" mat-dialog-title>Confirmation</h2>
 <div class="modal-content" mat-dialog-content>
   <p>
-    Êtes-vous sûr de vouloir réserver une place pour le {{ data.trainName }}?
+    Êtes-vous sûr de vouloir réserver une place pour le {{ data.nom_train }}?
   </p>
-  <p>Départ à: {{ data.specs?.departLieu }} ({{ data.specs?.departHeure }})</p>
+  <p>Départ à: {{ data.gare_depart }} ({{ data.depart_heure }})</p>
+  <p>Arrivée à: {{ data.gare_arrivee }} ({{ data.arrivee_heure }})</p>
   <p>
-    Arrivée à: {{ data.specs?.arriveeLieu }} ({{ data.specs?.arriveeHeure }})
+    Places disponibles: {{ data.places_max - data.places_reservees }} de
+    {{ data.places_max }}
   </p>
-  <p>Places disponibles: {{ availableSeats }} de {{ data.placesMax }}</p>
 </div>
 <div class="modal-actions" mat-dialog-actions>
   <button

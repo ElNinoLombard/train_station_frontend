@@ -1,0 +1,47 @@
+.search-bar {
+  position: relative;
+  width: 300px;
+  margin: 20px auto;
+
+  input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 20px;
+    background-color: #f1f1f1;
+    color: #333;
+    font-size: 16px;
+    outline: none;
+    transition: background-color 0.3s;
+
+    &::placeholder {
+      color: #999;
+    }
+
+    &:focus {
+      background-color: #fff;
+
+      &::placeholder {
+        color: #ccc;
+      }
+    }
+  }
+
+  span {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    color: #999;
+    cursor: pointer;
+    transition: color 0.3s;
+
+    &:hover {
+      color: #666;
+    }
+
+    &:active {
+      color: #333;
+    }
+  }
+}

@@ -2,26 +2,15 @@
 <div mat-dialog-content>
   <form [formGroup]="editTrainForm">
     <div>
-      <label for="departureTime">Heure de départ:</label>
-      <input
-        type="text"
-        id="departureTime"
-        formControlName="departureTime"
-        required
-      />
-    </div>
-    <div>
-      <label for="arrivalTime">Heure d'arrivée:</label>
-      <input
-        type="text"
-        id="arrivalTime"
-        formControlName="arrivalTime"
-        required
-      />
-    </div>
-    <div>
       <label for="status">Status:</label>
-      <input type="text" id="status" formControlName="status" required />
+      <select formControlName="status" (change)="toggleDelay()">
+        <option value="Annulé">Annulé</option>
+        <option value="En retard">En retard</option>
+      </select>
+    </div>
+    <div>
+      <label for="delayTime">Temps de retard (minutes):</label>
+      <input formControlName="delayTime" [disabled]="!isDelayed" type="text" />
     </div>
   </form>
 </div>

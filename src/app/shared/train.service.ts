@@ -10,14 +10,13 @@ export class TrainService {
   private trainDataSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>(
     []
   );
+  private baseUrl: string = `http://localhost${environment.backLocation}`;
 
   constructor(private http: HttpClient) {}
 
-  getTrainData(): Observable<any> {
-    const url = `http://localhost${environment.backLocation}trajets`;
-    console.log(url);
-    // @ts-ignore
-    return this.http.get<any>(url);
+  getTrainData(): Observable<any[]> {
+    const apiUrl = `${this.baseUrl}trajets`;
+    return this.http.get<any[]>(apiUrl);
   }
 
   getTrainDataByGare(idGare: number): Observable<any> {
