@@ -22,6 +22,18 @@ export class TrainTableComponent implements OnInit {
   ngOnInit() {
     this.trainService.getTrainData().subscribe(
       (data: any) => {
+        const tabTemp = data.data.map((trajet: any) => {
+          console.log(trajet);
+          if (trajet.annulation !== null && trajet.retards !== null) {
+            let datetimeArrivee = Date.parse(trajet.date + 'T' + trajet.arrivee_heure) + (parseInt(trajet.retards,10) * 60000);
+            console.log(datetimeArrivee);
+            const newDate = new Date(datetimeArrivee);
+            const heure = newDate.getHours().toString().length == 2 ? newDate.getHours() : '0' + newDate.getHours();
+            const min = newDate.getUTCMinutes().toString().length == 2 ? newDate.getUTCMinutes() : '0' + newDate.getUTCMinutes();
+            const sec = newDate.getUTCSeconds().toString().length == 2 ? newDate.getUTCSeconds() : '0' + newDate.getUTCSeconds();
+            trajet.arrivee_heure = heure + ':' + min + ':' + sec;
+          }
+        })
         this.trains = data.data; // Assign the fetched data to the trains property
         console.log('Train data fetched:', data);
       },

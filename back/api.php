@@ -34,9 +34,15 @@ switch ($request_method) {
             } else {
                 getAllAnnulations();
             }
+        } else if (preg_match('/reservation.*/', $route)) {
+          if (!empty($_GET['id'])) {
+            setReservation($_GET['id']);
+          } else {
+            echo 'ID manquant';
+          }
         }
 
-        break;
+      break;
     case 'POST':
         if (!empty($_POST['id'])) {
             $id = intval($_POST['id']);
@@ -95,9 +101,9 @@ function setTrajet($id_models_trajet, $id_train, $date, $places_reservees)
 
 
     if ($returnData['data']) {
-        $returnData['message'] = 'PUT réussi';
+        $returnData['message'] = 'INSERT réussi';
     } else {
-        $returnData['message'] = 'PUT échoué';
+        $returnData['message'] = 'INSERT échoué';
     }
 
     echo json_encode($returnData);
@@ -114,9 +120,9 @@ function setRetard($id_trajet, $duree, $commentaire)
     $returnData['data'] = mysqli_query($connexion, $query);
 
     if ($returnData['data']) {
-        $returnData['message'] = 'PUT réussi';
+        $returnData['message'] = 'INSERT réussi';
     } else {
-        $returnData['message'] = 'PUT échoué';
+        $returnData['message'] = 'INSERT échoué';
     }
 
     header('Content-Type: application/json');
@@ -133,7 +139,7 @@ function setAnnulation($id_trajet, $commentaire)
 
   header('Content-Type: application/json');
   header('Access-Control-Allow-Origin: *');
-  header('Access-Control-Allow-Methods: GET');
+  header('Access-Control-Allow-Methods: POST');
   header('Access-Control-Allow-Headers: Content-Type');
 
     $query = "INSERT INTO `annulations` (`id`, `id_trajet`, `commentaire`)
@@ -142,9 +148,9 @@ function setAnnulation($id_trajet, $commentaire)
     $returnData['data'] = mysqli_query($connexion, $query);
 
     if ($returnData['data']) {
-        $returnData['message'] = 'PUT réussi';
+        $returnData['message'] = 'INSERT réussi';
     } else {
-        $returnData['message'] = 'PUT échoué';
+        $returnData['message'] = 'INSERT échoué';
     }
 
     echo json_encode($returnData);
@@ -284,4 +290,19 @@ function getAnnulationByTrajet($id_trajet)
         $returnData['message'] = mysqli_connect_error();
     }
     echo json_encode($returnData);
+}
+
+function setReservation($id_trajet) {
+  global $connexion;
+  global $returnData;
+
+  $query = "UPDATE `trajets` SET places_reservees = ISNULL(places_reservees, 0) +1 WHERE id = $id_trajet";
+  $result = mysqli_query($connexion, $query);
+
+  if ($result) {
+    $returnData['data'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
+  } else {
+    $returnData['message'] = mysqli_connect_error();
+  }
+  echo json_encode($returnData);
 }

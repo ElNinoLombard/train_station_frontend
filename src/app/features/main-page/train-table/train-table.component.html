@@ -19,16 +19,16 @@
     <tbody>
       <tr *ngFor="let trajet of trains">
         <td>{{ trajet?.nom_train }}</td>
-        <td>{{ trajet?.gare_depart }}</td>
+        <td>{{ trajet?.gare_depart + ' | ' + trajet?.ville_depart }}</td>
         <td>{{ trajet?.depart_heure }}</td>
-        <td>{{ trajet?.gare_arrivee }}</td>
+        <td>{{ trajet?.gare_arrivee + ' | ' + trajet?.ville_arrivee }}</td>
         <td>{{ trajet?.arrivee_heure }}</td>
         <td>
           <span
             [ngClass]="{
-              warning: trajet?.status === 'Warning',
-              danger: trajet?.status === 'Danger',
-              success: trajet?.status === 'Success'
+              danger: trajet?.annulations !== null,
+              warning: trajet?.retards !== null && trajet?.annulations === null,
+              success: trajet?.annulations === null && trajet?.retards === null
             }"
           >
             {{ trajet?.status }}

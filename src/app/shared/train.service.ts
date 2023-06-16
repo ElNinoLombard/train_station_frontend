@@ -81,4 +81,9 @@ export class TrainService {
       const apiUrl = `${this.baseUrl}ca`;
       return this.http.get<any>(apiUrl);
   }
+
+  setReservation(id: number) {
+    const apiUrl = `${this.baseUrl}ca?id=` + id;
+    return this.http.get<any>(apiUrl);
+  }
 }

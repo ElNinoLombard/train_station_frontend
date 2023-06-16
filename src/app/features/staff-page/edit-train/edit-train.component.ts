@@ -38,10 +38,6 @@ export class EditTrainComponent implements OnInit {
       const duree = this.editTrainForm.value.delayTime;
       let status = selectedStatus;
 
-      console.log(status);
-      console.log(this.trainData.id_trajet);
-      console.log(duree);
-      console.log(commentaire);
       if (selectedStatus === 'En retard') {
         this.trainService.setTrainRetard(this.trainData.id_trajet, duree, commentaire).subscribe(
           response => {
