@@ -12,6 +12,14 @@
       <label for="delayTime">Temps de retard (minutes):</label>
       <input formControlName="delayTime" [disabled]="!isDelayed" type="text" />
     </div>
+    <div>
+      <label for="delayReason">Raison du retard:</label>
+      <input
+        formControlName="delayReason"
+        [disabled]="!isDelayed"
+        type="text"
+      />
+    </div>
   </form>
 </div>
 <div mat-dialog-actions>

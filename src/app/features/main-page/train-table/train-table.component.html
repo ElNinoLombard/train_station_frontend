@@ -2,7 +2,7 @@
   <table class="ticket-table">
     <caption>
       <div class="flex align-items-center justify-content-between">
-        <h1>TRAINS À L' APPROCHE</h1>
+        <h1>TRAINS À L'APPROCHE</h1>
       </div>
     </caption>
     <thead>
@@ -23,7 +23,17 @@
         <td>{{ trajet?.depart_heure }}</td>
         <td>{{ trajet?.gare_arrivee }}</td>
         <td>{{ trajet?.arrivee_heure }}</td>
-        <td>{{ trajet?.status }}</td>
+        <td>
+          <span
+            [ngClass]="{
+              warning: trajet?.status === 'Warning',
+              danger: trajet?.status === 'Danger',
+              success: trajet?.status === 'Success'
+            }"
+          >
+            {{ trajet?.status }}
+          </span>
+        </td>
         <td>
           <button
             *ngIf="!isStaffPage()"
@@ -37,7 +47,7 @@
             *ngIf="isStaffPage()"
             (click)="openEditTrainModal(trajet)"
           >
-            Editer
+            Éditer
           </button>
         </td>
       </tr>
