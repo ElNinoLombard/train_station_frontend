@@ -18,6 +18,7 @@ import { ConfirmationModalComponent } from './features/main-page/train-table/con
 import { ToastComponent } from './shared/toast/toast.component';
 import { StaffPageComponent } from './features/staff-page/staff-page.component';
 import { EditTrainComponent } from './features/staff-page/edit-train/edit-train.component';
+import { CeoComponent } from './features/ceo/ceo.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { EditTrainComponent } from './features/staff-page/edit-train/edit-train.
     ToastComponent,
     StaffPageComponent,
     EditTrainComponent,
+    CeoComponent,
   ],
   imports: [
     BrowserModule,

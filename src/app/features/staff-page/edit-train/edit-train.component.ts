@@ -10,7 +10,7 @@ import { TrainService } from 'src/app/shared/train.service';
 })
 export class EditTrainComponent implements OnInit {
   editTrainForm!: FormGroup;
-  isDelayed: boolean = false;
+  isOnTime: boolean = true;
 
   constructor(
     public dialogRef: MatDialogRef<EditTrainComponent>,
@@ -25,10 +25,10 @@ export class EditTrainComponent implements OnInit {
       departureTime: [this.trainData.depart_heure, Validators.required],
       arrivalTime: [this.trainData.arrivee_heure, Validators.required],
       status: [this.trainData.status || "à l'heure", Validators.required],
-      delayTime: [{ value: '', disabled: this.trainData.status !== 'delayed' }],
+      delayTime: [{ value: '', enabled: this.trainData.status == 'Retard' }],
       delayReason: '',
     });
-    this.isDelayed = this.trainData.status === 'delayed';
+    this.isOnTime = this.trainData.status === 'Retard';
   }
 
   saveChanges(): void {
@@ -38,7 +38,7 @@ export class EditTrainComponent implements OnInit {
       const duree = this.editTrainForm.value.delayTime;
       let status = selectedStatus;
 
-      console.log(selectedStatus);
+      console.log(status);
       console.log(this.trainData.id_trajet);
       console.log(duree);
       console.log(commentaire);
@@ -69,11 +69,9 @@ export class EditTrainComponent implements OnInit {
   toggleDelay() {
     const selectedStatus = this.editTrainForm.value.status;
     if (selectedStatus === 'En retard') {
-      this.editTrainForm.get('delayTime')?.enable();
-      this.isDelayed = true;
+      this.isOnTime = false;
     } else {
-      this.editTrainForm.get('delayTime')?.disable();
-      this.isDelayed = false;
+      this.isOnTime = true;
     }
   }
 }

@@ -1,29 +1,58 @@
-/* confirmation-modal.component.scss */
+/* Add these styles to your component's SCSS file */
 
-:host {
-  display: block;
-}
-
-.modal-title {
-  font-size: 20px;
+// Dialog Title
+.mat-dialog-title {
+  font-size: 24px;
   font-weight: bold;
-  margin: 0 0 16px;
-}
-
-.modal-content {
+  color: #333;
   margin-bottom: 16px;
 }
 
-.modal-actions {
+// Dialog Content
+.mat-dialog-content {
+  font-size: 16px;
+  color: #333;
+
+  p {
+    margin-bottom: 8px;
+  }
+}
+
+// Dialog Actions
+.mat-dialog-actions {
   display: flex;
   justify-content: flex-end;
-}
+  gap: 16px;
+  margin-top: 24px;
 
-.modal-confirm-button {
-  margin-right: 8px;
-  min-width: 96px;
-}
+  button {
+    border: none;
+    min-width: 120px;
+    font-size: 16px;
+    text-transform: uppercase;
+    border-radius: 4px;
+    padding: 8px 16px;
+    transition: background-color 0.3s ease;
 
-.modal-cancel-button {
-  min-width: 96px;
+    &:hover {
+      background-color: #2196f3;
+      color: #fff;
+    }
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+  }
+
+    button.primary {
+      border: none;
+      background-color: #2196f3;
+      color: #fff;
+    }
+  
+    button.cancel {
+      border: none;
+      color: #777;
+    }
 }
