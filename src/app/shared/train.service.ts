@@ -30,6 +30,20 @@ export class TrainService {
     return this.http.get<any>(url);
   }
 
+  getTrainRetard(id: number) {
+    const url = `http://localhost${environment.backLocation}retard?id=` + id;
+    console.log(url);
+    // @ts-ignore
+    return this.http.get<any>(url);
+  }
+
+  getTrainAnnulation(id: number) {
+    const url = `http://localhost${environment.backLocation}annulation?id=` + id;
+    console.log(url);
+    // @ts-ignore
+    return this.http.get<any>(url);
+  }
+
   setTrainRetard(id: number, duree: number, commentaire: string) {
     const url = `http://localhost${environment.backLocation}retard`;
     console.log(url);
