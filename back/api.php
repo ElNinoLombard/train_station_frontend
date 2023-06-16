@@ -46,10 +46,15 @@ function getAllTrajets() {
     global $connexion;
     global $returnData;
 
-    $query = "SELECT * FROM `trajets`
+    $query = "SELECT trajets.id as id_trajet, date, places_reservees, g1.nom as gare_depart, g1.ville as ville_depart, depart_heure, g2.nom as gare_depart, g2.ville as ville_depart, arrivee_heure, places_max, trains.nom as nom_train, SUM(retards.duree) as retards, annulations.id as annulations FROM `trajets`
 LEFT JOIN models_trajet on models_trajet.id = id_models_trajet
 LEFT JOIN trains on trains.id = id_train
-ORDER BY models_trajet.depart_heure ASC";
+LEFT JOIN gares as g1 on g1.id = models_trajet.depart_lieu
+LEFT JOIN gares as g2 on g2.id = models_trajet.arrivee_lieu
+LEFT JOIN retards on retards.id_trajet = trajets.id
+LEFT JOiN annulations on annulations.id_trajet = trajets.id
+GROUP BY trajets.id, annulations.id
+ORDER BY models_trajet.depart_heure ASC;";
     $result = mysqli_query($connexion, $query);
 
     if ($result) {
@@ -147,12 +152,16 @@ function getAllTrajetsByGare($id_gare) {
   $date_max = $date->format('Y-m-d');
     $date_min = $date->modify("-1 day")->format('y-m-d');
 
-    $query = "SELECT date, places_reservees, depart_lieu, depart_heure, arrivee_lieu, arrivee_heure, places_max, trains.nom as nom_train, gares.nom as nom_gare, ville FROM `trajets`
-LEFT JOIN models_trajet on models_trajet.id = id_models_trajet
-LEFT JOIN trains on trains.id = id_train
-LEFT JOIN gares on gares.id = models_trajet.depart_lieu or gares.id = models_trajet.arrivee_lieu
-WHERE date = '$date_min' or date = '$date_max' AND gares.id = $id_gare
-ORDER BY models_trajet.depart_heure ASC;";
+    $query = "SELECT trajets.id AS id_trajet, date, places_reservees, g1.nom AS gare_depart, g1.ville AS ville_depart, depart_heure, g2.nom AS gare_arrivee, g2.ville AS ville_arrivee, arrivee_heure, places_max, trains.nom AS nom_train, SUM(retards.duree) AS retards, annulations.id AS annulations
+FROM `trajets`
+LEFT JOIN models_trajet ON models_trajet.id = trajets.id_models_trajet
+LEFT JOIN trains ON trains.id = trajets.id_train
+LEFT JOIN gares AS g1 ON g1.id = models_trajet.depart_lieu
+LEFT JOIN gares AS g2 ON g2.id = models_trajet.arrivee_lieu
+LEFT JOIN retards ON retards.id_trajet = trajets.id
+LEFT JOIN annulations ON annulations.id_trajet = trajets.id
+WHERE date IN ('$date_min', '$date_max') AND (g1.id = $id_gare OR g2.id = $id_gare)
+GROUP BY trajets.id, annulations.id;";
     $result = mysqli_query($connexion, $query);
     if ($result) {
       $returnData['data'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
