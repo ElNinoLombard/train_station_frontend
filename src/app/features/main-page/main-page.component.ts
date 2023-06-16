@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { TrainService } from 'src/app/shared/train.service';
 
 interface IGare {
@@ -9,6 +10,7 @@ interface IGare {
   id: number;
   ville: string;
 }
+
 @Component({
   selector: 'app-main-page',
   templateUrl: './main-page.component.html',
@@ -16,18 +18,21 @@ interface IGare {
 })
 export class MainPageComponent implements OnInit {
   searchControl = new FormControl();
-  filteredOptions: Observable<string[]> | undefined;
+  filteredOptions: Observable<IGare[]> | undefined;
   filteredTrains: any[] = [];
   allTrains: any[] = [];
 
-  options: IGare[] = []; // Add the options property and initialize it as an empty array
+  options: IGare[] = [];
+
+  @ViewChild(MatAutocompleteTrigger)
+  autocompleteTrigger!: MatAutocompleteTrigger;
 
   constructor(private trainService: TrainService) {}
 
   ngOnInit(): void {
     this.trainService.getGareData().subscribe({
       next: (gares: any) => {
-        console.log('gares:', gares); // Verify the data received
+        console.log('gares:', gares);
         this.options = gares.data;
       },
       error: (error: any) => {
@@ -37,7 +42,7 @@ export class MainPageComponent implements OnInit {
 
     this.trainService.getTrainData().subscribe({
       next: (trains: any) => {
-        console.log('trains:', trains); // Verify the data received
+        console.log('trains:', trains);
         this.allTrains = trains.data;
         this.applyFilters();
       },
@@ -46,26 +51,35 @@ export class MainPageComponent implements OnInit {
       },
     });
 
-    this.searchControl.valueChanges.subscribe(() => {
-      this.applyFilters();
-    });
+    this.filteredOptions = this.searchControl.valueChanges.pipe(
+      startWith(''),
+      map((value) => this.filterOptions(value))
+    );
   }
 
   applyFilters(): void {
-    const searchQuery = this.searchControl.value?.trim() || '';
-    if (searchQuery === '') {
+    const searchQuery = this.searchControl.value;
+
+    if (typeof searchQuery !== 'string') {
+      this.filteredTrains = this.allTrains;
+      return;
+    }
+
+    const trimmedQuery = searchQuery.trim();
+
+    if (trimmedQuery === '') {
       this.filteredTrains = this.allTrains;
     } else {
       this.filteredTrains = this.filterTrains(this.allTrains);
     }
   }
 
-  // filterOptions(value: string): string[] {
-  //   const filterValue = value.toLowerCase();
-  //   return this.options.filter((option) =>
-  //     option.toLowerCase().includes(filterValue)
-  //   );
-  // }
+  filterOptions(value: string): IGare[] {
+    const filterValue = value.toLowerCase();
+    return this.options.filter((option) =>
+      option.nom.toLowerCase().includes(filterValue)
+    );
+  }
 
   filterTrains(trains: any[]): any[] {
     if (!trains || !Array.isArray(trains)) {
@@ -84,7 +98,6 @@ export class MainPageComponent implements OnInit {
       const departureLocation = train.departureLocation?.toLowerCase() || '';
       const arrivalLocation = train.arrivalLocation?.toLowerCase() || '';
 
-      // Filter based on departure location, search query, and time constraints
       return (
         (departureLocation.includes(
           this.searchControl.value?.toLowerCase() || ''
@@ -99,12 +112,14 @@ export class MainPageComponent implements OnInit {
     return filteredTrains;
   }
 
-  handleSearchOptionSelected(option: any): void {
-    const selectedOptionText = option.option.viewValue;
+  handleSearchOptionSelected(event: any): void {
+    this.searchControl.setValue(''); // Clear the search control
+
+    const selectedOption = event.option.value;
     console.log('searchControl:', this.searchControl.value);
-    console.log('selectedOptionText:', selectedOptionText);
-    this.searchControl.setValue(selectedOptionText);
-    this.trainService.getTrainDataByGare(option.option.value).subscribe({
+    console.log('selectedOption:', selectedOption);
+
+    this.trainService.getTrainDataByGare(selectedOption.id).subscribe({
       next: (trains: any) => {
         this.allTrains = trains.data;
         this.applyFilters(); // Apply filters after updating the train data
@@ -113,6 +128,12 @@ export class MainPageComponent implements OnInit {
   }
 
   handleSearchInput(): void {
+    const searchQuery = this.searchControl.value?.trim() || '';
     this.applyFilters();
+
+    if (searchQuery === '') {
+      // Reset filtered trains when search query is empty
+      this.filteredTrains = this.allTrains;
+    }
   }
 }

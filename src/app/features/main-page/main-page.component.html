@@ -11,7 +11,7 @@
       #auto="matAutocomplete"
       (optionSelected)="handleSearchOptionSelected($event)"
     >
-      <mat-option *ngFor="let option of options" [value]="option.id">
+      <mat-option *ngFor="let option of options" [value]="option">
         {{ option.nom + " | " + option.ville }}
       </mat-option>
     </mat-autocomplete>
